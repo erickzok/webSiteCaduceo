@@ -1,4 +1,3 @@
-#!C:/Users/Erick/AppData/Local/Programs/Python/Python312/python
 from datetime import datetime, timedelta
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_mysqldb import MySQL
@@ -39,19 +38,20 @@ def login():
         password = request.form['password']
         user = User(0 , username, password,0)
         logged_user = ModelUser.login(db, user)
-       
-        if logged_user.get_idRol()==0:
-            print("Primer link")
-            login_user(logged_user)
-            return redirect(url_for('menu'))
-            print(1)
+        if logged_user!=None:
+            if logged_user.get_idRol()==2:
+                print("Primer link")
+                login_user(logged_user)
+                return redirect(url_for('menu'))
+                print(1)
 
-        elif logged_user.get_idRol()==1:
-            login_user(logged_user)
-            return redirect(url_for('admin'))
-            print(2)
-        print("NINGUNO")
-        flash("Usuario y/o contraseña inválida.")
+            elif logged_user.get_idRol()==1:
+                login_user(logged_user)
+                return redirect(url_for('admin'))
+                print(2)
+            print("NINGUNO")
+        else:
+            flash("Usuario y/o contraseña inválida.")
     return render_template('auth/login.html')
 
 @app.route('/logout')
@@ -69,7 +69,10 @@ def menu():
 @app.route('/admin')
 @login_required
 def admin():
-    return render_template('adminTable/admin.html')
+    actividad_dao = ActividadDAO(db, 0)
+    actividades = actividad_dao.get_all_actividades()
+    return render_template('adminTable/admin.html', actividades=actividades)
+    
 
 @app.route('/registrarUsuario', methods=['GET', 'POST'])
 def registrarUsuario():
@@ -98,7 +101,7 @@ def registrarUsuario():
 @login_required
 def home():
     actividad_dao = ActividadDAO(db, current_user.idEmpleado)
-    actividades = actividad_dao.get_all_actividades()
+    actividades = actividad_dao.get_all_actividades_for_id()
     return render_template('home.html', actividades=actividades)
 
 @app.route('/registrarActividad', methods=['GET', 'POST'])

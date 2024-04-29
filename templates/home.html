@@ -1,0 +1,35 @@
+{% extends './base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block body %}
+<h1>Bienvenido, {{ current_user.fullname }}</h1>
+<a class="btn btn-secondary" href="{{ url_for('menu') }}">Menú</a>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Proyecto</th>
+      <th scope="col">Jefe Inmediato</th>
+      <th scope="col">Actividad</th>
+      <th scope="col">Porcentaje</th>
+      <th scope="col">Fecha Fin</th>
+      <th scope="col">Hora Registro</th>
+      <th scope="col">Fecha Registro</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for actividad in actividades %}
+    <tr>
+      <td>{{ actividad.proyecto }}</td>
+      <td>{{ actividad.JefeInmediato }}</td>
+      <td>{{ actividad.actividad }}</td>
+      <td>{{ actividad.Porcentaje }}%</td>
+      <td>{{ actividad.FechaFin }}</td>
+      <td>{{ actividad.hora }}</td>
+      <td>{{ actividad.FechaRegistro }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

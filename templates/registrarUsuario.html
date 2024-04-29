@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  
+body{  
+  font-family: Calibri, Helvetica, sans-serif;  
+  background-color: pink;  
+}  
+.container {  
+    padding: 50px;  
+  background-color: lightblue;  
+}  
+  
+input[type=text], input[type=password], textarea {  
+  width: 100%;  
+  padding: 15px;  
+  margin: 5px 0 22px 0;  
+  display: inline-block;  
+  border: none;  
+  background: #f1f1f1;  
+}  
+input[type=text]:focus, input[type=password]:focus {  
+  background-color: orange;  
+  outline: none;  
+}  
+ div {  
+            padding: 10px 0;  
+         }  
+hr {  
+  border: 1px solid #f1f1f1;  
+  margin-bottom: 25px;  
+}  
+.registerbtn {  
+  background-color: #4CAF50;  
+  color: white;  
+  padding: 16px 20px;  
+  margin: 8px 0;  
+  border: none;  
+  cursor: pointer;  
+  width: 100%;  
+  opacity: 0.9;  
+}  
+.registerbtn:hover {  
+  opacity: 1;  
+}  
+
+#notification-container {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 9999;
+    }
+
+    .notification {
+        background-color: #4CAF50;
+        color: white;
+        padding: 15px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+</style>
+</head>
+<body>
+<form method="POST" action="{{ url_for('registrarUsuario') }}">
+  {{ form.hidden_tag() }}
+
+  <div class="container">
+    <center><h1>Registrar nuevo usuario</h1></center>
+    <hr>
+
+    {% if error_message %}
+      <div id="notification-container">{{ error_message }}</div>
+    {% endif %}
+  
+    <label>Nombre del Profesional</label>
+    {{ form.nombreEmpleado(class="form-control", placeholder="Nombre Completo", required=true) }}
+  
+    <label>DNI:</label>
+    {{ form.DNI(class="form-control", placeholder="DNI", required=true) }}
+
+    <label>Nombre de Usuario:</label>
+    {{ form.username(class="form-control", placeholder="Usuario", required=true) }}
+  
+    <label>Contraseña:</label>
+    {{ form.password(class="form-control", placeholder="Contraseña", required=true) }}
+
+    <label>Confirmar Contraseña:</label>
+    {{ form.confirm_password(class="form-control", placeholder="Confirmar Contraseña", required=true) }}
+
+    <button type="submit" class="registerbtn">Register</button>
+  </div>
+</form>
+
+<script>
+  $(document).ready(function() {
+      // Función para mostrar notificaciones flash
+      function showFlashMessages() {
+          var messages = "{{ get_flashed_messages() }}".split(",");
+          var container = $('#notification-container');
+          for (var i = 0; i < messages.length; i++) {
+              var message = messages[i].trim();
+              if (message !== "") {
+                  container.append('<div class="notification">' + message + '</div>');
+              }
+          }
+          // Eliminar las notificaciones después de unos segundos
+          setTimeout(function() {
+              $('.notification').fadeOut('slow', function() {
+                  $(this).remove();
+              });
+          }, 5000); // Cambia 5000 por el tiempo en milisegundos que deseas que la notificación permanezca visible
+      }
+  
+      // Llama a la función al cargar la página
+      showFlashMessages();
+  });
+  </script>
+
+</body>
+
+</html>

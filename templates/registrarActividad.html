@@ -1,0 +1,130 @@
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+<meta name="viewport" content="width=device-width, initial-scale=1">  
+<style>  
+    body{  
+        font-family: Calibri, Helvetica, sans-serif;  
+        background-color: pink;  
+    }  
+    .container {  
+        padding: 50px;  
+        background-color: lightblue;  
+    }  
+
+    input[type=text], input[type=password], textarea {  
+        width: 100%;  
+        padding: 15px;  
+        margin: 5px 0 22px 0;  
+        display: inline-block;  
+        border: none;  
+        background: #f1f1f1;  
+    }  
+    input[type=text]:focus, input[type=password]:focus {  
+        background-color: orange;  
+        outline: none;  
+    }  
+
+    div {  
+        padding: 10px 0;  
+    }  
+
+    hr {  
+        border: 1px solid #f1f1f1;  
+        margin-bottom: 25px;  
+    }  
+
+    .registerbtn {  
+        background-color: #4CAF50;  
+        color: white;  
+        padding: 16px 20px;  
+        margin: 8px 0;  
+        border: none;  
+        cursor: pointer;  
+        width: 100%;  
+        opacity: 0.9;  
+    }  
+
+    .registerbtn:hover {  
+        opacity: 1;  
+    }  
+
+    /* Estilos para las notificaciones */
+    #notification-container {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 9999;
+    }
+
+    .notification {
+        background-color: #4CAF50;
+        color: white;
+        padding: 15px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+</style>  
+</head>  
+<body>  
+<form action="/registrarActividad" method="POST">  
+    {{ form.hidden_tag() }}
+    <div class="container">  
+        <center><h1> Registro de Actividades</h1></center>  
+        <a class="btn btn-secondary" href="{{ url_for('menu') }}">Menú</a>
+        <hr>  
+        
+        <!-- Contenedor de notificaciones -->
+        <div id="notification-container"></div>
+
+        <label> Proyecto: </label>   
+        {{ form.proyecto(class="form-control") }}<br><br>  
+        
+        <label> Jefe Inmediato: </label>   
+        {{ form.JefeInmediato(class="form-control") }}<br><br>  
+
+        <label> Actividad: </label>   
+        {{ form.actividad(class="form-control") }}<br><br>  
+
+        <label> Porcentaje de Avance: </label>   
+        {{ form.Porcentaje(class="form-control") }}<br><br>  
+
+        <label> Fecha de Finalización: </label>   
+        {{ form.FechaFin(class="form-control") }}<br><br>  
+
+        <label> Comentario: </label>   
+        {{ form.comentarios(class="form-control") }}<br><br>  
+
+        <input type="submit" class="registerbtn" value="Guardar">  
+    </div>  
+</form>  
+
+<!-- Script para mostrar notificaciones flash -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+$(document).ready(function() {
+    // Función para mostrar notificaciones flash
+    function showFlashMessages() {
+        var messages = "{{ get_flashed_messages() }}".split(",");
+        var container = $('#notification-container');
+        for (var i = 0; i < messages.length; i++) {
+            var message = messages[i].trim();
+            if (message !== "") {
+                container.append('<div class="notification">' + message + '</div>');
+            }
+        }
+        // Eliminar las notificaciones después de unos segundos
+        setTimeout(function() {
+            $('.notification').fadeOut('slow', function() {
+                $(this).remove();
+            });
+        }, 5000); // Cambia 5000 por el tiempo en milisegundos que deseas que la notificación permanezca visible
+    }
+
+    // Llama a la función al cargar la página
+    showFlashMessages();
+});
+</script>
+</body>  
+</html>
